@@ -22,20 +22,24 @@
   },
   "homepage": "https://github.com/zhanafe/kaleido#readme",
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.51",
-    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.52",
+    "@babel/preset-env": "^7.0.0-beta.52",
+    "@types/fabric": "^1.5.37",
     "babel-loader": "^8.0.0-beta.4",
     "cross-env": "^5.2.0",
     "del-cli": "^1.1.0",
-    "eslint": "^5.0.1",
+    "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-prettier": "^2.6.1",
+    "eslint-plugin-prettier": "^2.6.2",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.13.7",
-    "webpack": "^4.14.0",
+    "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"
+  },
+  "dependencies": {
+    "pixi.js": "^4.8.1"
   }
 }

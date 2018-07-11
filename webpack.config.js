@@ -23,8 +23,7 @@ module.exports = {
   devtool: isProd ? 'nosources-source-map' : 'eval-source-map',
   devServer: {
     quiet: true,
-    disableHostCheck: true,
-    host: '0.0.0.0',
+    open: true,
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
