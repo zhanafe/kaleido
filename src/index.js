@@ -137,8 +137,7 @@ async function launch() {
       splashScreen.parentNode.replaceChild(app.view, splashScreen);
     });
   } catch (error) {
-    console.dir(error);
-    alert("I can't launch without camera @@");
+    alert("Can't launch without camera @@");
   }
 }
 

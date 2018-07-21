@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -5,6 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
+  output: {
+    path: path.resolve(__dirname, 'docs'),
+  },
   module: {
     rules: [
       {
