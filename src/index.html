@@ -5,11 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>kaleido</title>
+  <title>千千萬萬花花筒</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
 </head>
 
-<body>
+<body class="bg-black text-white">
+  <div id="splashScreen" class="fixed pin flex items-center justify-center">
+    <div class="w-64 flex flex-col">
+      <img src="./logotype.svg" alt="萬花筒" class="block mb-10">
+      <button type="button" id="launchBtn" class="h-10 border-2 border-white text-white hover:text-black hover:bg-white rounded-full text-xs font-bold uppercase tracking-wide">Launch</button>
+    </div>
+  </div>
+
+  <div class="fixed pin-x pin-b flex justify-center py-8">
+    <button id="downloadBtn" type="button" class="hidden">
+      <img src="./download.svg" alt="下載">
+    </button>
+  </div>
+
 </body>
 
 </html>

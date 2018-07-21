@@ -18,6 +18,14 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader',
+      },
     ],
   },
   devtool: isProd ? 'nosources-source-map' : 'eval-source-map',

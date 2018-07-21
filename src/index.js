@@ -1,40 +1,30 @@
 import * as PIXI from 'pixi.js';
 
-const app = new PIXI.Application({
-  antialias: true,
-  resolution: window.devicePixelRatio,
-});
-
-app.renderer.autoResize = true;
-
+const splashScreen = document.getElementById('splashScreen');
+const launchBtn = document.getElementById('launchBtn');
+const downloadBtn = document.getElementById('downloadBtn');
 let resizeTick = false;
-
-function resizeCanvas() {
-  if (!resizeTick) {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-
-    resizeTick = true;
-    requestAnimationFrame(() => {
-      app.renderer.resize(w, h);
-      resizeTick = false;
-    });
-  }
-}
 
 function degToRad(degree) {
   return (degree * Math.PI) / 180;
 }
 
-resizeCanvas();
-// window.addEventListener('resize', resizeCanvas);
-document.body.appendChild(app.view);
+async function launch() {
+  launchBtn.removeEventListener('click', launch);
 
-(async function() {
+  const app = new PIXI.Application({
+    preserveDrawingBuffer: true,
+    antialias: true,
+    resolution: window.devicePixelRatio,
+  });
+
+  app.renderer.autoResize = true;
+
   try {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' },
     });
+
     const video = document.createElement('video');
     video.autoplay = true;
     video.srcObject = mediaStream;
@@ -42,11 +32,11 @@ document.body.appendChild(app.view);
     const texture = PIXI.Texture.fromVideo(video);
 
     texture.baseTexture.on('loaded', baseTexture => {
-      const aspectRatio = baseTexture.width / baseTexture.height;
+      const textureAspectRatio = baseTexture.width / baseTexture.height;
 
       const triangle = new PIXI.Graphics();
       triangle.beginFill();
-      if (aspectRatio > 1) {
+      if (textureAspectRatio > 1) {
         triangle.drawPolygon([
           0,
           0,
@@ -79,6 +69,13 @@ document.body.appendChild(app.view);
 
           const group = new PIXI.Container();
 
+          if (i % 2) {
+            group.scale.y = -1;
+            group.rotation = degToRad(60 * (i - 1));
+          } else {
+            group.rotation = degToRad(60 * i);
+          }
+
           switch (j) {
             case 1:
               group.pivot.set(mask.width, 0);
@@ -90,13 +87,6 @@ document.body.appendChild(app.view);
               break;
           }
 
-          if (i % 2) {
-            group.scale.y = -1;
-            group.rotation = degToRad(60 * (i - 1));
-          } else {
-            group.rotation = degToRad(60 * i);
-          }
-
           group.addChild(sprite, mask);
           mainGroup.addChild(group);
         }
@@ -106,11 +96,50 @@ document.body.appendChild(app.view);
         triangle.width / 2,
         triangle.height * (Math.sqrt(3) / 6)
       );
-      mainGroup.position.set(app.screen.width / 2, app.screen.height / 2);
-      mainGroup.scale.set(0.5);
+
       app.stage.addChild(mainGroup);
+
+      const mainGroupWidth = mainGroup.width;
+      const mainGroupHeight = mainGroup.height;
+
+      function resizeCanvas() {
+        if (!resizeTick) {
+          resizeTick = true;
+          const innerWidth = window.innerWidth;
+          const innerHeight = window.innerHeight;
+          const screenAspectRatio = innerWidth / innerHeight;
+
+          requestAnimationFrame(() => {
+            app.renderer.resize(innerWidth, innerHeight);
+            mainGroup.position.set(app.screen.width / 2, app.screen.height / 2);
+            if (screenAspectRatio > 1) {
+              mainGroup.scale.set((innerWidth / mainGroupWidth) * 1.7);
+            } else {
+              mainGroup.scale.set((innerHeight / mainGroupHeight) * 1.4);
+            }
+            resizeTick = false;
+          });
+        }
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      downloadBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.setAttribute('href', app.renderer.extract.base64(app.stage));
+        link.setAttribute('download', `screenshot-${Date.now()}.png`);
+        link.click();
+      });
+
+      downloadBtn.classList.remove('hidden');
+
+      splashScreen.parentNode.replaceChild(app.view, splashScreen);
     });
   } catch (error) {
     console.dir(error);
+    alert("I can't launch without camera @@");
   }
-})();
+}
+
+launchBtn.addEventListener('click', launch);
